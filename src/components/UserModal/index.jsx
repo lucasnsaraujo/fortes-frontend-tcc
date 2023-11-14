@@ -36,6 +36,15 @@ export function UserModal(props) {
     setSelectedSkills(allSelectedSkills);
   }
 
+  function setExperience(skillId, value) {
+    const allSelectedSkills = JSON.parse(JSON.stringify(selectedSkills));
+    const selectedIndex = allSelectedSkills.findIndex(
+      (item) => item.id === skillId
+    );
+    allSelectedSkills[selectedIndex].experience = value;
+    setSelectedSkills(allSelectedSkills);
+  }
+
   const skills = [
     { id: 1, nome: "Programação em Python" },
     { id: 2, nome: "Desenvolvimento Web" },
@@ -68,15 +77,6 @@ export function UserModal(props) {
     { id: 29, nome: "Gestão de Qualidade" },
     { id: 30, nome: "Desenvolvimento de Jogos" },
   ];
-
-  function updateSkillExperience(skillId, value) {
-    const skill = selectedSkills.find((s) => s.id === skillId);
-    skill.experience = value;
-    setSelectedSkills((previous) => [
-      ...previous.filter((item) => item.id !== skillId),
-      skill,
-    ]);
-  }
 
   return (
     <>
@@ -182,16 +182,14 @@ export function UserModal(props) {
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                 <select
-                                  value={skill.experience}
+                                  value={String(skill.experience)}
+                                  defaultValue={"0"}
                                   onChange={(e) =>
-                                    updateSkillExperience(
-                                      skill.id,
-                                      e.target.value
-                                    )
+                                    setExperience(skill.id, e.target.value)
                                   }
                                   className="py-1 px-4 w-24 border block border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
                                 >
-                                  <option selected>0</option>
+                                  <option value="0">0</option>
                                   <option value="1">1</option>
                                   <option value="2">2</option>
                                   <option value="3">3</option>
