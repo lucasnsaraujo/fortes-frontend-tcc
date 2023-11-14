@@ -90,7 +90,7 @@ export function UserDescription(props) {
                                 <AiFillStar
                                   key={index}
                                   className={cn(
-                                    "text-xl text-gray-300 hover:text-gray-400 cursor-pointer",
+                                    "text-xl text-gray-300 hover:text-gray-400 cursor-pointer transition-all",
                                     skill?.expertise >= star.value &&
                                       "text-yellow-400 hover:text-yellow-500"
                                   )}
