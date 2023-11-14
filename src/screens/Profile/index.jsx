@@ -37,13 +37,13 @@ export default function Search() {
     setSelectedSkills(allSelectedSkills);
   }
 
-  function updateSkillExperience(skillId, value) {
-    const skill = selectedSkills.find((s) => s.id === skillId);
-    skill.experience = value;
-    setSelectedSkills((previous) => [
-      ...previous.filter((item) => item.id !== skillId),
-      skill,
-    ]);
+  function setExperience(skillId, value) {
+    const allSelectedSkills = JSON.parse(JSON.stringify(selectedSkills));
+    const selectedIndex = allSelectedSkills.findIndex(
+      (item) => item.id === skillId
+    );
+    allSelectedSkills[selectedIndex].experience = value;
+    setSelectedSkills(allSelectedSkills);
   }
 
   console.log(selectedSkills);
@@ -170,10 +170,7 @@ export default function Search() {
                                 <select
                                   value={skill.experience}
                                   onChange={(e) =>
-                                    updateSkillExperience(
-                                      skill.id,
-                                      e.target.value
-                                    )
+                                    setExperience(skill.id, e.target.value)
                                   }
                                   className="py-1 px-4 w-24 border block border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
                                 >
