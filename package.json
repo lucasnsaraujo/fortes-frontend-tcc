@@ -10,12 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@preline/select": "^2.0.0",
+    "axios": "^1.6.1",
     "clsx": "^2.0.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "preline": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.11.0",
     "react-loading": "^2.0.3",
     "react-router-dom": "^6.18.0",
     "sort-by": "^1.2.0",

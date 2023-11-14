@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import preline from "preline/plugin";
 export default {
   content: [
     "./index.html",
@@ -9,5 +10,5 @@ export default {
     extend: {},
   },
   darkMode: true,
-  plugins: [require("preline/plugin")],
+  plugins: [preline],
 };
