@@ -90,7 +90,7 @@ export default function Navbar() {
                 )}
                 to="/admin"
               >
-                Painel Administrador
+                Administrador
               </Link>
               <Link
                 className={cn(

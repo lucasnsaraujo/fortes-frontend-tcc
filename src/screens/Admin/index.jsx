@@ -1,8 +1,11 @@
+import { useState } from "react";
 import Navbar from "../../components/Navbar";
+import { SkillModal } from "../../components/SkillModal";
 import { SkillsTable } from "../../components/SkillsTable";
 import { Table } from "../../components/UsersTable";
 
 export default function Admin() {
+  const [showSkillModal, setShowSkillModal] = useState(true);
   const users = [
     {
       id: 1,
@@ -89,6 +92,7 @@ export default function Admin() {
           </div>
         </div>
       </div>
+      <SkillModal show={showSkillModal} />
     </>
   );
 }

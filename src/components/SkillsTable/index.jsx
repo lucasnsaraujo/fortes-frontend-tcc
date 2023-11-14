@@ -1,3 +1,5 @@
+import { FaPlusCircle } from "react-icons/fa";
+
 function SkillsTable(props) {
   function contact(id) {
     console.log(id);
@@ -7,15 +9,15 @@ function SkillsTable(props) {
       <div className="-m-1.5 overflow-x-auto">
         <div className="p-1.5 min-w-full inline-block align-middle">
           <div className="border rounded-lg divide-y divide-gray-200 dark:border-gray-700 dark:divide-gray-700">
-            <div className="py-3 px-4">
-              <div className="relative max-w-xs">
+            <div className="py-3 px-4 flex flex-row justify-between">
+              <div className="relative max-w-xs ">
                 <label className="sr-only">Buscar colaborador</label>
                 <input
                   type="text"
                   name="hs-table-with-pagination-search"
                   id="hs-table-with-pagination-search"
-                  className="py-2 px-3 ps-9 block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-                  placeholder="Pesquise por nome ou habilidade"
+                  className="py-2 px-3 ps-9 flex flex-1 w-96 border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                  placeholder="Pesquise por habilidade"
                 />
                 <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-3">
                   <svg
@@ -35,6 +37,12 @@ function SkillsTable(props) {
                   </svg>
                 </div>
               </div>
+              <button
+                type="button"
+                className="px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-100 text-blue-800 hover:bg-blue-200 disabled:opacity-50 disabled:pointer-events-none dark:hover:bg-blue-900 dark:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+              >
+                <FaPlusCircle className="text-blue-800" /> Adicionar habilidade
+              </button>
             </div>
             <div className="overflow-hidden">
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -70,7 +78,7 @@ function SkillsTable(props) {
                         </button>
                         <button
                           type="button"
-                          className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                          className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-red-600 hover:text-red-800 disabled:opacity-50 disabled:pointer-events-none dark:text-red-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                           onClick={() => {}}
                         >
                           Remover
