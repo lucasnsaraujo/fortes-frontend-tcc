@@ -30,6 +30,51 @@ export default function Search() {
           expertise: 4,
           experience: 2,
         },
+        {
+          name: "Comunicação",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Redação",
+          expertise: 5,
+          experience: 4,
+        },
+        {
+          name: "Programação em Python",
+          expertise: 4,
+          experience: 2,
+        },
+        {
+          name: "Comunicação",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Redação",
+          expertise: 5,
+          experience: 4,
+        },
+        {
+          name: "Programação em Python",
+          expertise: 4,
+          experience: 2,
+        },
+        {
+          name: "Comunicação",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Redação",
+          expertise: 5,
+          experience: 4,
+        },
+        {
+          name: "Programação em Python",
+          expertise: 4,
+          experience: 2,
+        },
       ],
     },
     {

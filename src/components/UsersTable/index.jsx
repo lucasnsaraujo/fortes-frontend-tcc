@@ -78,7 +78,7 @@ function Table(props) {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
                         {user.name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-ellipsis max-w-xl overflow-hidden">
                         {user.skills.map((skill, index) => (
                           <span key={index}>
                             {skill.name}
