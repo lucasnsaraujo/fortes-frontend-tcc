@@ -1,11 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { SkillModal } from "../../components/SkillModal";
 import { SkillsTable } from "../../components/SkillsTable";
 import { Table } from "../../components/UsersTable";
+import { UserModal } from "../../components/UserModal";
+import { DeleteModal } from "../../components/DeleteModal";
 
 export default function Admin() {
-  const [showSkillModal, setShowSkillModal] = useState(true);
+  const [showSkillModal, setShowSkillModal] = useState(false);
+  const [skillForm, setSkillForm] = useState({});
+
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [userForm, setUserForm] = useState({});
+
+  const [itemToDelete, setItemToDelete] = useState(null);
+
+  function deleteItem() {
+    console.log("deleting item");
+    setItemToDelete(false);
+  }
+
   const users = [
     {
       id: 1,
@@ -83,16 +97,39 @@ export default function Admin() {
         <div className="grid grid-cols-1 gap-8">
           <div>
             <h1 className="text-2xl font-bold mb-4">Gerenciar colaboradores</h1>
-            <Table users={users} admin />
+            <Table
+              users={users}
+              admin
+              setShowModal={setShowUserModal}
+              delete={setItemToDelete}
+            />
           </div>
           <div className="h-0.5 rounded-full bg-gray-200 my-8" />
           <div>
             <h1 className="text-2xl font-bold mb-4">Gerenciar habilidades</h1>
-            <SkillsTable skills={skills} />
+            <SkillsTable
+              skills={skills}
+              setShowSkillModal={setShowSkillModal}
+              delete={setItemToDelete}
+            />
           </div>
         </div>
       </div>
-      <SkillModal show={showSkillModal} />
+      <UserModal
+        show={showUserModal}
+        setShow={setShowUserModal}
+        delete={setItemToDelete}
+      />
+      <SkillModal
+        show={showSkillModal}
+        setShow={setShowSkillModal}
+        delete={setItemToDelete}
+      />
+      <DeleteModal
+        show={itemToDelete}
+        setShow={setItemToDelete}
+        delete={deleteItem}
+      />
     </>
   );
 }

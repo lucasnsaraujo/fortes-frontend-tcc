@@ -1,26 +1,25 @@
-import { useState } from "react";
-import { Modal } from "../../components/Modal";
-import Navbar from "../../components/Navbar";
-
-import { FaPlusCircle, FaMinusCircle } from "react-icons/fa";
+import { useEffect, useState } from "react";
 import { cn } from "../../utils/tailwind";
-import { StarRating } from "../../components/StarRating";
+import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
+import { AiOutlineClose } from "react-icons/ai";
+import { StarRating } from "../StarRating";
 
-export default function Search() {
-  const [showingModal, setShowingModal] = useState(false);
+export function UserModal(props) {
   const [selectedSkills, setSelectedSkills] = useState([]);
 
-  function submitForm() {
-    setShowingModal(true);
-    setTimeout(() => setShowingModal(false), 3500);
-  }
+  useEffect(() => {
+    console.log(selectedSkills);
+  }, [selectedSkills]);
 
   function addSkill(selectedSkill) {
     const alreadySelected = selectedSkills.some(
       (skill) => skill.id === selectedSkill.id
     );
     if (!alreadySelected) {
-      setSelectedSkills((current) => [...current, selectedSkill]);
+      setSelectedSkills((current) => [
+        ...current,
+        { ...selectedSkill, expertise: 1, experience: 0 },
+      ]);
     } else {
       setSelectedSkills((current) =>
         current.filter((skill) => skill.id !== selectedSkill.id)
@@ -36,17 +35,6 @@ export default function Search() {
     allSelectedSkills[selectedIndex].expertise = value;
     setSelectedSkills(allSelectedSkills);
   }
-
-  function updateSkillExperience(skillId, value) {
-    const skill = selectedSkills.find((s) => s.id === skillId);
-    skill.experience = value;
-    setSelectedSkills((previous) => [
-      ...previous.filter((item) => item.id !== skillId),
-      skill,
-    ]);
-  }
-
-  console.log(selectedSkills);
 
   const skills = [
     { id: 1, nome: "Programação em Python" },
@@ -81,59 +69,85 @@ export default function Search() {
     { id: 30, nome: "Desenvolvimento de Jogos" },
   ];
 
+  function updateSkillExperience(skillId, value) {
+    const skill = selectedSkills.find((s) => s.id === skillId);
+    skill.experience = value;
+    setSelectedSkills((previous) => [
+      ...previous.filter((item) => item.id !== skillId),
+      skill,
+    ]);
+  }
+
   return (
     <>
-      <Navbar />
-      <div className="max-w-7xl my-0 mx-auto py-8 px-4 pb-24">
-        <h1 className="text-2xl font-semibold mb-8">Minha Conta</h1>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
-          <div>
-            <h1 className="text-md mb-2">Nome completo</h1>
-            <input
-              type="text"
-              className="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-              placeholder="Insira seu nome completo"
-            />
-          </div>
-          <div>
-            <h1 className="text-md mb-2">Número de cadastro</h1>
-            <input
-              type="text"
-              className="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-              placeholder="Insira seu número de cadastro no banco da Fortes"
-              maxLength={9}
-            />
-          </div>
-          <div className="lg:col-span-2">
-            <h1 className="text-md mb-2">Habilidades</h1>
-            <div className="flex flex-wrap gap-3">
-              {skills.map((skill) => (
-                <button
-                  key={skill.id}
-                  onClick={() => addSkill(skill)}
-                  className={cn(
-                    "flex justify-center font-light items-center gap-1 text-sm lg:text-base border border-gray-200 py-1 px-2 rounded-lg text-gray-500 hover:bg-gray-200 transition-all",
-                    selectedSkills.some(
-                      (selectedSkill) => selectedSkill.id === skill.id
-                    ) && "bg-green-700 text-white hover:bg-green-900"
-                  )}
-                >
-                  {!selectedSkills.some(
-                    (selectedSkill) => selectedSkill.id === skill.id
-                  ) ? (
-                    <FaPlusCircle className="text-green-700" />
-                  ) : (
-                    <FaMinusCircle className="text-white" />
-                  )}
-                  {skill.nome}
-                </button>
-              ))}
+      <div
+        className={cn(
+          "fixed top-0 left-0 w-screen h-screen z-10 bg-gray-500/60 flex justify-center items-center transition-all duration-300 opacity-100",
+          !props?.show && "opacity-0 invisible"
+        )}
+      >
+        <div className="max-w-7xl">
+          <div
+            className={cn(
+              "relative flex p-16 flex-col bg-white border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7] transition-all duration-300",
+              !props?.show && "-mt-8"
+            )}
+          >
+            <div
+              onClick={() => props.setShow(false)}
+              className="p-2 absolute text-xl hover:bg-gray-200 active:bg-gray-300 rounded-md right-4 top-4 cursor-pointer transition-all"
+            >
+              <AiOutlineClose />
             </div>
-          </div>
-          <div className="lg:col-span-2">
+            <h1 className="text-2xl font-semibold mb-8">Adicionar usuário</h1>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
+              <div>
+                <h1 className="text-md mb-2">Nome completo</h1>
+                <input
+                  type="text"
+                  className="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                  placeholder="Insira seu nome completo"
+                />
+              </div>
+              <div>
+                <h1 className="text-md mb-2">Número de cadastro</h1>
+                <input
+                  type="text"
+                  className="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                  placeholder="Insira seu número de cadastro no banco da Fortes"
+                  maxLength={9}
+                />
+              </div>
+              <div className="lg:col-span-2">
+                <h1 className="text-md mb-2">Habilidades</h1>
+                <div className="flex flex-wrap gap-3">
+                  {skills.map((skill) => (
+                    <button
+                      key={skill.id}
+                      onClick={() => addSkill(skill)}
+                      className={cn(
+                        "flex justify-center font-light items-center gap-1 text-sm lg:text-base border border-gray-200 py-1 px-2 rounded-lg text-gray-500 hover:bg-gray-200 transition-all",
+                        selectedSkills.some(
+                          (selectedSkill) => selectedSkill.id === skill.id
+                        ) && "bg-green-700 text-white hover:bg-green-900"
+                      )}
+                    >
+                      {!selectedSkills.some(
+                        (selectedSkill) => selectedSkill.id === skill.id
+                      ) ? (
+                        <FaPlusCircle className="text-green-700" />
+                      ) : (
+                        <FaMinusCircle className="text-white" />
+                      )}
+                      {skill.nome}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
             {/* Table */}
             {!!selectedSkills.length && (
-              <div className="flex flex-col max-h-96">
+              <div className="flex flex-col max-h-44">
                 <div className="-m-1.5 overflow-x-auto">
                   <div className="p-1.5 min-w-full inline-block align-middle">
                     <div className="overflow-hidden">
@@ -203,18 +217,15 @@ export default function Search() {
               </div>
             )}
             {/* End table */}
+            <button
+              type="button"
+              className="py-3 px-4 w-full flex flex-1 justify-center mt-8 gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+            >
+              Salvar
+            </button>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={submitForm}
-          className="py-3 px-4 w-full lg:w-1/4 inline-flex justify-center mt-8 gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-        >
-          Salvar
-        </button>
       </div>
-
-      <Modal showing={showingModal} title={"teste"} description={"teste"} />
     </>
   );
 }

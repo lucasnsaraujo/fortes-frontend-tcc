@@ -40,6 +40,7 @@ function SkillsTable(props) {
               <button
                 type="button"
                 className="px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-100 text-blue-800 hover:bg-blue-200 disabled:opacity-50 disabled:pointer-events-none dark:hover:bg-blue-900 dark:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                onClick={() => props?.setShowSkillModal(true)}
               >
                 <FaPlusCircle className="text-blue-800" /> Adicionar habilidade
               </button>
@@ -79,7 +80,7 @@ function SkillsTable(props) {
                         <button
                           type="button"
                           className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-red-600 hover:text-red-800 disabled:opacity-50 disabled:pointer-events-none dark:text-red-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                          onClick={() => {}}
+                          onClick={() => props.delete(skill.id)}
                         >
                           Remover
                         </button>
