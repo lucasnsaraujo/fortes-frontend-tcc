@@ -6,7 +6,7 @@ import Profile from "./screens/Profile";
 
 export const App = () => {
   // Check if the user is stored in localStorage
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = !JSON.parse(localStorage.getItem("user"));
 
   return (
     <BrowserRouter>

@@ -1,3 +1,4 @@
+import { AiOutlineMail } from "react-icons/ai";
 import { FaPlusCircle } from "react-icons/fa";
 
 function Table(props) {
@@ -80,20 +81,30 @@ function Table(props) {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                         {user.skills.map((skill, index) => (
                           <span key={index}>
-                            {skill}
+                            {skill.name}
                             {index !== user.skills.length - 1 && ","}{" "}
                           </span>
                         ))}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium flex gap-8">
                         {!props?.admin ? (
-                          <button
-                            type="button"
-                            className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                            onClick={() => contact(user.id)}
-                          >
-                            Contato
-                          </button>
+                          <>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                              onClick={() => props.openUserPreview(user.id)}
+                            >
+                              Ver habilidades
+                            </button>
+                            <button
+                              type="button"
+                              className="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-100 text-blue-800 hover:bg-blue-200 disabled:opacity-50 disabled:pointer-events-none dark:hover:bg-blue-900 dark:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                              onClick={() => contact(user.id)}
+                            >
+                              Contato
+                              <AiOutlineMail />
+                            </button>
+                          </>
                         ) : (
                           <>
                             <button

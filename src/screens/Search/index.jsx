@@ -1,82 +1,330 @@
 import Navbar from "../../components/Navbar";
+import { UserDescription } from "../../components/UserDescription";
 import { Table } from "../../components/UsersTable";
+import { useState } from "react";
 
 export default function Search() {
+  const [moreInformation, setMoreInformation] = useState(null);
+
+  function openUserPreview(userId) {
+    setMoreInformation(users.find((user) => user.id === userId));
+  }
+
   const users = [
     {
       id: 1,
-      name: "João da Silva",
-      skills: ["Excel", "PowerPoint", "Power BI"],
+      name: "João da Silva Santos",
+      skills: [
+        {
+          name: "Comunicação",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Redação",
+          expertise: 5,
+          experience: 4,
+        },
+        {
+          name: "Programação em Python",
+          expertise: 4,
+          experience: 2,
+        },
+      ],
     },
     {
       id: 2,
-      name: "Maria Santos",
-      skills: ["JavaScript", "React", "Node.js"],
+      name: "Maria Oliveira Pereira",
+      skills: [
+        {
+          name: "Comunicação",
+          expertise: 3,
+          experience: 2,
+        },
+        {
+          name: "Redação",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Design Gráfico",
+          expertise: 5,
+          experience: 4,
+        },
+      ],
     },
     {
       id: 3,
-      name: "Pedro Alves",
-      skills: ["HTML", "CSS", "SASS"],
+      name: "José da Silva Junior",
+      skills: [
+        {
+          name: "Programação em Python",
+          expertise: 5,
+          experience: 5,
+        },
+        {
+          name: "Análise de Dados",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Marketing Digital",
+          expertise: 3,
+          experience: 2,
+        },
+      ],
     },
     {
       id: 4,
-      name: "Ana Oliveira",
-      skills: ["Python", "Django", "Pandas"],
+      name: "Ana Paula Gonçalves",
+      skills: [
+        {
+          name: "Comunicação",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Design Gráfico",
+          expertise: 3,
+          experience: 2,
+        },
+        {
+          name: "Redação",
+          expertise: 4,
+          experience: 3,
+        },
+      ],
     },
     {
       id: 5,
-      name: "Carlos Pereira",
-      skills: ["Java", "Spring Boot", "Hibernate"],
+      name: "Pedro Oliveira",
+      skills: [
+        {
+          name: "Programação em Python",
+          expertise: 5,
+          experience: 4,
+        },
+        {
+          name: "Análise de Dados",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Marketing Digital",
+          expertise: 3,
+          experience: 2,
+        },
+      ],
     },
     {
       id: 6,
-      name: "Julia Rodrigues",
-      skills: ["C#", ".NET", "SQL Server"],
+      name: "Mariana da Cruz",
+      skills: [
+        {
+          name: "Comunicação",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Redação",
+          expertise: 5,
+          experience: 4,
+        },
+        {
+          name: "Design Gráfico",
+          expertise: 4,
+          experience: 3,
+        },
+      ],
     },
     {
       id: 7,
-      name: "Ricardo Costa",
-      skills: ["Ruby", "Ruby on Rails", "PostgreSQL"],
+      name: "Carlos Santos",
+      skills: [
+        {
+          name: "Programação em Python",
+          expertise: 5,
+          experience: 5,
+        },
+        {
+          name: "Análise de Dados",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Marketing Digital",
+          expertise: 3,
+          experience: 2,
+        },
+      ],
     },
     {
       id: 8,
-      name: "Camila Fernandes",
-      skills: ["PHP", "Laravel", "MySQL"],
+      name: "Lúcia Martins",
+      skills: [
+        {
+          name: "Comunicação",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Redação",
+          expertise: 5,
+          experience: 4,
+        },
+        {
+          name: "Design Gráfico",
+          expertise: 5,
+          experience: 4,
+        },
+      ],
     },
     {
       id: 9,
-      name: "Miguel Sousa",
-      skills: ["Swift", "iOS Development", "Core Data"],
+      name: "Ricardo Silva",
+      skills: [
+        {
+          name: "Programação em Python",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Análise de Dados",
+          expertise: 5,
+          experience: 4,
+        },
+        {
+          name: "Marketing Digital",
+          expertise: 3,
+          experience: 2,
+        },
+      ],
     },
     {
       id: 10,
-      name: "Larissa Lima",
-      skills: ["Go", "Docker", "Kubernetes"],
+      name: "Fernanda Souza",
+      skills: [
+        {
+          name: "Comunicação",
+          expertise: 3,
+          experience: 2,
+        },
+        {
+          name: "Redação",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Design Gráfico",
+          expertise: 4,
+          experience: 3,
+        },
+      ],
     },
     {
       id: 11,
-      name: "Lucas Santos",
-      skills: ["Vue.js", "Vuex", "Vuetify"],
+      name: "André Oliveira",
+      skills: [
+        {
+          name: "Programação em Python",
+          expertise: 5,
+          experience: 5,
+        },
+        {
+          name: "Análise de Dados",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Marketing Digital",
+          expertise: 3,
+          experience: 2,
+        },
+      ],
     },
     {
       id: 12,
-      name: "Isabela Fernandes",
-      skills: ["Ruby", "React Native", "Firebase"],
+      name: "Beatriz Ferreira",
+      skills: [
+        {
+          name: "Comunicação",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Redação",
+          expertise: 5,
+          experience: 4,
+        },
+        {
+          name: "Design Gráfico",
+          expertise: 4,
+          experience: 3,
+        },
+      ],
     },
     {
       id: 13,
-      name: "Gustavo Silva",
-      skills: ["Angular", "TypeScript", "RxJS"],
+      name: "Lucas Pereira",
+      skills: [
+        {
+          name: "Programação em Python",
+          expertise: 5,
+          experience: 5,
+        },
+        {
+          name: "Análise de Dados",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Marketing Digital",
+          expertise: 3,
+          experience: 2,
+        },
+      ],
     },
     {
       id: 14,
-      name: "Laura Oliveira",
-      skills: ["C++", "OpenGL", "Unity"],
+      name: "Juliana Santos",
+      skills: [
+        {
+          name: "Comunicação",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Redação",
+          expertise: 5,
+          experience: 4,
+        },
+        {
+          name: "Programação em Python",
+          expertise: 4,
+          experience: 2,
+        },
+      ],
     },
     {
       id: 15,
-      name: "Daniel Pereira",
-      skills: ["Scala", "Akka", "Play Framework"],
+      name: "Rodrigo Almeida",
+      skills: [
+        {
+          name: "Comunicação",
+          expertise: 4,
+          experience: 3,
+        },
+        {
+          name: "Redação",
+          expertise: 5,
+          experience: 4,
+        },
+        {
+          name: "Design Gráfico",
+          expertise: 5,
+          experience: 4,
+        },
+      ],
     },
   ];
 
@@ -87,8 +335,13 @@ export default function Search() {
         <h1 className="mb-4 text-2xl font-semibold">
           Buscar colaborador por habilidade
         </h1>
-        <Table users={users} />
+        <Table users={users} openUserPreview={openUserPreview} />
       </div>
+      <UserDescription
+        show={moreInformation}
+        user={moreInformation}
+        close={() => setMoreInformation(null)}
+      />
     </>
   );
 }
