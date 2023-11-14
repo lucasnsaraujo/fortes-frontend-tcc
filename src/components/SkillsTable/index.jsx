@@ -1,4 +1,4 @@
-function Table(props) {
+function SkillsTable(props) {
   function contact(id) {
     console.log(id);
   }
@@ -48,59 +48,33 @@ function Table(props) {
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
-                    >
-                      Habilidades
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-xs font-medium text-gray-500 uppercase w-0 text-left"
+                      className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase w-0"
                     >
                       Ações
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {props?.users?.map((user, index) => (
+                  {props?.skills?.map((skill, index) => (
                     <tr key={index}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
-                        {user.name}
+                        {skill.nome}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                        {user.skills.map((skill, index) => (
-                          <span key={index}>
-                            {skill}
-                            {index !== user.skills.length - 1 && ","}{" "}
-                          </span>
-                        ))}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium flex gap-8">
-                        {!props?.admin ? (
-                          <button
-                            type="button"
-                            className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                            onClick={() => contact(user.id)}
-                          >
-                            Contato
-                          </button>
-                        ) : (
-                          <>
-                            <button
-                              type="button"
-                              className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                              onClick={() => contact(user.id)}
-                            >
-                              Editar
-                            </button>
-                            <button
-                              type="button"
-                              className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                              onClick={() => contact(user.id)}
-                            >
-                              Remover
-                            </button>
-                          </>
-                        )}
+                      <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium gap-8 flex justify-end">
+                        <button
+                          type="button"
+                          className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                          onClick={() => {}}
+                        >
+                          Editar
+                        </button>
+                        <button
+                          type="button"
+                          className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                          onClick={() => {}}
+                        >
+                          Remover
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -114,4 +88,4 @@ function Table(props) {
   );
 }
 
-export { Table };
+export { SkillsTable };
