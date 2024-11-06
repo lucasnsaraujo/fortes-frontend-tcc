@@ -1,7 +1,8 @@
+import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { UserDescription } from "../../components/UserDescription";
 import { Table } from "../../components/UsersTable";
-import { useState } from "react";
+import { pb } from "../../services/pocketbase";
 
 export default function Search() {
   const [moreInformation, setMoreInformation] = useState(null);
@@ -372,6 +373,14 @@ export default function Search() {
       ],
     },
   ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const a = await pb.collection("users").getList();
+      console.log(a);
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
