@@ -52,22 +52,26 @@ export default function Admin() {
 
       const skillsData = await pb.collection("habilidades").getFullList();
 
-      const parsed = usersReturned.map((user) => {
-        const skills = usersSkills.filter(
-          (skill) => skill.usuarioId === user.id
+      const parsed = usersReturned
+        .map((user) => {
+          const skills = usersSkills.filter(
+            (skill) => skill.usuarioId === user.id
+          );
+          return {
+            id: user.id,
+            codigoFuncionario: user.codigoFuncionario,
+            name: user.nome,
+            skills: skills.map((skill) => ({
+              id: skill.expand.habilidadeId.id,
+              name: skill.expand.habilidadeId.nome,
+              expertise: skill.nivelExpertise,
+              experience: skill.tempoExperiencia,
+            })),
+          };
+        })
+        .filter(
+          (user) => user.id !== JSON?.parse(localStorage?.getItem("@user"))?.id
         );
-        return {
-          id: user.id,
-          codigoFuncionario: user.codigoFuncionario,
-          name: user.nome,
-          skills: skills.map((skill) => ({
-            id: skill.expand.habilidadeId.id,
-            name: skill.expand.habilidadeId.nome,
-            expertise: skill.nivelExpertise,
-            experience: skill.tempoExperiencia,
-          })),
-        };
-      });
 
       setSkills(
         skillsData.map((skill) => ({ id: skill.id, nome: skill.nome }))

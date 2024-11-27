@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "../../components/Modal";
 import Navbar from "../../components/Navbar";
 
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import { StarRating } from "../../components/StarRating";
+import { pb } from "../../services/pocketbase";
 import { cn } from "../../utils/tailwind";
 
 export default function Search() {
@@ -46,38 +47,77 @@ export default function Search() {
     setSelectedSkills(allSelectedSkills);
   }
 
-  const skills = [
-    { id: 1, nome: "Programação em Python" },
-    { id: 2, nome: "Desenvolvimento Web" },
-    { id: 3, nome: "Gestão de Projetos" },
-    { id: 4, nome: "Marketing Digital" },
-    { id: 5, nome: "Design Gráfico" },
-    { id: 6, nome: "Análise de Dados" },
-    { id: 7, nome: "Redação Criativa" },
-    { id: 8, nome: "Gerenciamento de Redes Sociais" },
-    { id: 9, nome: "Arquitetura de Software" },
-    { id: 10, nome: "Machine Learning" },
-    { id: 11, nome: "Fotografia" },
-    { id: 12, nome: "Ilustração" },
-    { id: 13, nome: "Contabilidade Financeira" },
-    { id: 14, nome: "Engenharia de Dados" },
-    { id: 15, nome: "Liderança de Equipe" },
-    { id: 16, nome: "Gestão de Recursos Humanos" },
-    { id: 17, nome: "Marketing de Conteúdo" },
-    { id: 18, nome: "Administração de Banco de Dados" },
-    { id: 19, nome: "Desenho Técnico" },
-    { id: 20, nome: "Copywriting" },
-    { id: 21, nome: "Estratégia de Negócios" },
-    { id: 22, nome: "Gestão de Projetos Ágeis" },
-    { id: 23, nome: "Desenvolvimento Mobile" },
-    { id: 24, nome: "Marketing de Mídia Social" },
-    { id: 25, nome: "Engenharia de Software" },
-    { id: 26, nome: "Bioinformática" },
-    { id: 27, nome: "Design de Interface de Usuário" },
-    { id: 28, nome: "Pesquisa de Mercado" },
-    { id: 29, nome: "Gestão de Qualidade" },
-    { id: 30, nome: "Desenvolvimento de Jogos" },
-  ];
+  const [skills, setSkills] = useState();
+  const [name, setName] = useState("");
+  const [registerNumber, setRegisterNumber] = useState("");
+  const [user, setUser] = useState();
+
+  async function handleSave() {
+    if (!name || !registerNumber || selectedSkills.length === 0) {
+      alert("Preencha todos os campos!");
+      return;
+    }
+    await pb.collection("usuarios").update(user.id, {
+      nome: name,
+      codigoFuncionario: registerNumber,
+    });
+
+    const items = await pb.collection("habilidadeUsuario").getFullList({
+      filter: `usuarioId = "${user.id}"`,
+    });
+
+    for (let item of items) {
+      await pb.collection("habilidadeUsuario").delete(item.id);
+    }
+
+    for (let skill of selectedSkills) {
+      await pb.collection("habilidadeUsuario").create({
+        usuarioId: user.id,
+        habilidadeId: skill.id,
+        tempoExperiencia: skill.experience,
+        nivelExpertise: skill.expertise,
+      });
+    }
+    window.location.reload();
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const currentUser = JSON.parse(localStorage.getItem("@user"));
+      const userData = await pb.collection("usuarios").getOne(currentUser?.id);
+
+      setUser(userData);
+
+      setName(userData.nome);
+      setRegisterNumber(userData.codigoFuncionario);
+
+      const usersSkills = await pb
+        .collection("habilidadeUsuario")
+        .getFullList({ expand: "habilidadeId" });
+
+      const skillsData = await pb.collection("habilidades").getFullList();
+
+      setSkills(skillsData);
+
+      const userSkills = usersSkills.filter(
+        (skill) => skill.usuarioId === userData.id
+      );
+      console.log(userSkills);
+      const parsed = userSkills.map((skill) => ({
+        id: skill.expand.habilidadeId.id,
+        nome: skill.expand.habilidadeId.nome,
+        expertise: skill.nivelExpertise,
+        experience: skill.tempoExperiencia,
+      }));
+
+      setSelectedSkills(parsed);
+
+      setSkills(
+        skillsData.map((skill) => ({ id: skill.id, nome: skill.nome }))
+      );
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -91,6 +131,8 @@ export default function Search() {
               type="text"
               className="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
               placeholder="Insira seu nome completo"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div>
@@ -100,12 +142,14 @@ export default function Search() {
               className="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
               placeholder="Insira seu número de cadastro no banco da Fortes"
               maxLength={9}
+              value={registerNumber}
+              onChange={(e) => setRegisterNumber(e.target.value)}
             />
           </div>
           <div className="lg:col-span-2">
             <h1 className="text-md mb-2">Habilidades</h1>
             <div className="flex flex-wrap gap-3">
-              {skills.map((skill) => (
+              {skills?.map((skill) => (
                 <button
                   key={skill.id}
                   onClick={() => addSkill(skill)}
@@ -202,7 +246,7 @@ export default function Search() {
         </div>
         <button
           type="button"
-          onClick={submitForm}
+          onClick={handleSave}
           className="py-3 px-4 w-full lg:w-1/4 inline-flex justify-center mt-8 gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
         >
           Salvar
