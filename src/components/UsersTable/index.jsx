@@ -2,9 +2,6 @@ import { AiOutlineMail } from "react-icons/ai";
 import { FaPlusCircle } from "react-icons/fa";
 
 function Table(props) {
-  function contact(id) {
-    console.log(id);
-  }
   return (
     <div className="flex flex-col">
       <div className="-m-1.5 overflow-x-auto">
@@ -42,7 +39,10 @@ function Table(props) {
                 <button
                   type="button"
                   className="px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-100 text-blue-800 hover:bg-blue-200 disabled:opacity-50 disabled:pointer-events-none dark:hover:bg-blue-900 dark:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                  onClick={() => props?.setShowModal(true)}
+                  onClick={() => {
+                    props?.setShowModal(true);
+                    props.setUserModalMode("add");
+                  }}
                 >
                   <FaPlusCircle className="text-blue-800" /> Adicionar usuário
                 </button>
@@ -85,6 +85,10 @@ function Table(props) {
                             {index !== user.skills.length - 1 && ","}{" "}
                           </span>
                         ))}
+                        <span className="italic text-slate-700 opacity-30">
+                          {user.skills.length === 0 &&
+                            "Nenhuma habilidade registrada"}
+                        </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium flex gap-8">
                         {!props?.admin ? (
@@ -110,14 +114,20 @@ function Table(props) {
                             <button
                               type="button"
                               className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                              onClick={() => contact(user.id)}
+                              onClick={() => {
+                                console.log(user);
+                                props.handleEditUser(user.id);
+                              }}
                             >
                               Editar
                             </button>
                             <button
                               type="button"
                               className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-red-600 hover:text-red-800 disabled:opacity-50 disabled:pointer-events-none dark:text-red-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                              onClick={() => props.delete(user.id)}
+                              onClick={() => {
+                                console.log(user);
+                                props.handleRemoveUser(user.id);
+                              }}
                             >
                               Remover
                             </button>

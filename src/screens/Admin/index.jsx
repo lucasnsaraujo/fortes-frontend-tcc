@@ -1,375 +1,116 @@
 import { useEffect, useState } from "react";
+import { DeleteModal } from "../../components/DeleteModal";
 import Navbar from "../../components/Navbar";
 import { SkillModal } from "../../components/SkillModal";
 import { SkillsTable } from "../../components/SkillsTable";
-import { Table } from "../../components/UsersTable";
 import { UserModal } from "../../components/UserModal";
-import { DeleteModal } from "../../components/DeleteModal";
+import { Table } from "../../components/UsersTable";
+import { pb } from "../../services/pocketbase";
 
 export default function Admin() {
   const [showSkillModal, setShowSkillModal] = useState(false);
   const [skillForm, setSkillForm] = useState({});
+  const [selectedUserToDelete, setSelectedUserToDelete] = useState(null);
 
   const [showUserModal, setShowUserModal] = useState(false);
   const [userForm, setUserForm] = useState({});
 
   const [itemToDelete, setItemToDelete] = useState(null);
 
-  function deleteItem() {
-    console.log("deleting item");
+  const [users, setUsers] = useState([]);
+  const [skills, setSkills] = useState([]);
+
+  const [skillModalMode, setSkillModalMode] = useState("");
+  const [selectedSkillId, setSelectedSkillId] = useState();
+
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [userModalMode, setUserModalMode] = useState("");
+
+  async function deleteItem() {
+    console.log({ selectedUserToDelete });
+    if (!itemToDelete) return;
+
+    if (itemToDelete?.type === "skill") {
+      await pb.collection("habilidades").delete(itemToDelete?.id);
+      window.location.reload();
+      // delete skill
+    } else {
+      await pb.collection("usuarios").delete(selectedUserToDelete);
+      window.location.reload();
+      // delete user
+    }
+
     setItemToDelete(false);
   }
 
-  const users = [
-    {
-      id: 1,
-      name: "João da Silva Santos",
-      skills: [
-        {
-          name: "Comunicação",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Redação",
-          expertise: 5,
-          experience: 4,
-        },
-        {
-          name: "Programação em Python",
-          expertise: 4,
-          experience: 2,
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Maria Oliveira Pereira",
-      skills: [
-        {
-          name: "Comunicação",
-          expertise: 3,
-          experience: 2,
-        },
-        {
-          name: "Redação",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Design Gráfico",
-          expertise: 5,
-          experience: 4,
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "José da Silva Junior",
-      skills: [
-        {
-          name: "Programação em Python",
-          expertise: 5,
-          experience: 5,
-        },
-        {
-          name: "Análise de Dados",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Marketing Digital",
-          expertise: 3,
-          experience: 2,
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "Ana Paula Gonçalves",
-      skills: [
-        {
-          name: "Comunicação",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Design Gráfico",
-          expertise: 3,
-          experience: 2,
-        },
-        {
-          name: "Redação",
-          expertise: 4,
-          experience: 3,
-        },
-      ],
-    },
-    {
-      id: 5,
-      name: "Pedro Oliveira",
-      skills: [
-        {
-          name: "Programação em Python",
-          expertise: 5,
-          experience: 4,
-        },
-        {
-          name: "Análise de Dados",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Marketing Digital",
-          expertise: 3,
-          experience: 2,
-        },
-      ],
-    },
-    {
-      id: 6,
-      name: "Mariana da Cruz",
-      skills: [
-        {
-          name: "Comunicação",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Redação",
-          expertise: 5,
-          experience: 4,
-        },
-        {
-          name: "Design Gráfico",
-          expertise: 4,
-          experience: 3,
-        },
-      ],
-    },
-    {
-      id: 7,
-      name: "Carlos Santos",
-      skills: [
-        {
-          name: "Programação em Python",
-          expertise: 5,
-          experience: 5,
-        },
-        {
-          name: "Análise de Dados",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Marketing Digital",
-          expertise: 3,
-          experience: 2,
-        },
-      ],
-    },
-    {
-      id: 8,
-      name: "Lúcia Martins",
-      skills: [
-        {
-          name: "Comunicação",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Redação",
-          expertise: 5,
-          experience: 4,
-        },
-        {
-          name: "Design Gráfico",
-          expertise: 5,
-          experience: 4,
-        },
-      ],
-    },
-    {
-      id: 9,
-      name: "Ricardo Silva",
-      skills: [
-        {
-          name: "Programação em Python",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Análise de Dados",
-          expertise: 5,
-          experience: 4,
-        },
-        {
-          name: "Marketing Digital",
-          expertise: 3,
-          experience: 2,
-        },
-      ],
-    },
-    {
-      id: 10,
-      name: "Fernanda Souza",
-      skills: [
-        {
-          name: "Comunicação",
-          expertise: 3,
-          experience: 2,
-        },
-        {
-          name: "Redação",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Design Gráfico",
-          expertise: 4,
-          experience: 3,
-        },
-      ],
-    },
-    {
-      id: 11,
-      name: "André Oliveira",
-      skills: [
-        {
-          name: "Programação em Python",
-          expertise: 5,
-          experience: 5,
-        },
-        {
-          name: "Análise de Dados",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Marketing Digital",
-          expertise: 3,
-          experience: 2,
-        },
-      ],
-    },
-    {
-      id: 12,
-      name: "Beatriz Ferreira",
-      skills: [
-        {
-          name: "Comunicação",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Redação",
-          expertise: 5,
-          experience: 4,
-        },
-        {
-          name: "Design Gráfico",
-          expertise: 4,
-          experience: 3,
-        },
-      ],
-    },
-    {
-      id: 13,
-      name: "Lucas Pereira",
-      skills: [
-        {
-          name: "Programação em Python",
-          expertise: 5,
-          experience: 5,
-        },
-        {
-          name: "Análise de Dados",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Marketing Digital",
-          expertise: 3,
-          experience: 2,
-        },
-      ],
-    },
-    {
-      id: 14,
-      name: "Juliana Santos",
-      skills: [
-        {
-          name: "Comunicação",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Redação",
-          expertise: 5,
-          experience: 4,
-        },
-        {
-          name: "Programação em Python",
-          expertise: 4,
-          experience: 2,
-        },
-      ],
-    },
-    {
-      id: 15,
-      name: "Rodrigo Almeida",
-      skills: [
-        {
-          name: "Comunicação",
-          expertise: 4,
-          experience: 3,
-        },
-        {
-          name: "Redação",
-          expertise: 5,
-          experience: 4,
-        },
-        {
-          name: "Design Gráfico",
-          expertise: 5,
-          experience: 4,
-        },
-      ],
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      const usersReturned = await pb.collection("usuarios").getFullList();
+      const usersSkills = await pb
+        .collection("habilidadeUsuario")
+        .getFullList({ expand: "habilidadeId" });
 
-  const skills = [
-    { id: 1, nome: "Programação em Python" },
-    { id: 2, nome: "Desenvolvimento Web" },
-    { id: 3, nome: "Gestão de Projetos" },
-    { id: 4, nome: "Marketing Digital" },
-    { id: 5, nome: "Design Gráfico" },
-    { id: 6, nome: "Análise de Dados" },
-    { id: 7, nome: "Redação Criativa" },
-    // { id: 8, nome: "Gerenciamento de Redes Sociais" },
-    // { id: 9, nome: "Arquitetura de Software" },
-    // { id: 10, nome: "Machine Learning" },
-    // { id: 11, nome: "Fotografia" },
-    // { id: 12, nome: "Ilustração" },
-    // { id: 13, nome: "Contabilidade Financeira" },
-    // { id: 14, nome: "Engenharia de Dados" },
-    // { id: 15, nome: "Liderança de Equipe" },
-    // { id: 16, nome: "Gestão de Recursos Humanos" },
-    // { id: 17, nome: "Marketing de Conteúdo" },
-    // { id: 18, nome: "Administração de Banco de Dados" },
-    // { id: 19, nome: "Desenho Técnico" },
-    // { id: 20, nome: "Copywriting" },
-    // { id: 21, nome: "Estratégia de Negócios" },
-    // { id: 22, nome: "Gestão de Projetos Ágeis" },
-    // { id: 23, nome: "Desenvolvimento Mobile" },
-    // { id: 24, nome: "Marketing de Mídia Social" },
-    // { id: 25, nome: "Engenharia de Software" },
-    // { id: 26, nome: "Bioinformática" },
-    // { id: 27, nome: "Design de Interface de Usuário" },
-    // { id: 28, nome: "Pesquisa de Mercado" },
-    // { id: 29, nome: "Gestão de Qualidade" },
-    // { id: 30, nome: "Desenvolvimento de Jogos" },
-  ];
+      const skillsData = await pb.collection("habilidades").getFullList();
+
+      const parsed = usersReturned.map((user) => {
+        const skills = usersSkills.filter(
+          (skill) => skill.usuarioId === user.id
+        );
+        return {
+          id: user.id,
+          codigoFuncionario: user.codigoFuncionario,
+          name: user.nome,
+          skills: skills.map((skill) => ({
+            id: skill.expand.habilidadeId.id,
+            name: skill.expand.habilidadeId.nome,
+            expertise: skill.nivelExpertise,
+            experience: skill.tempoExperiencia,
+          })),
+        };
+      });
+
+      setSkills(
+        skillsData.map((skill) => ({ id: skill.id, nome: skill.nome }))
+      );
+
+      setUsers(parsed);
+    };
+    fetchData();
+  }, []);
+
+  function handleEditClick(itemId) {
+    setSelectedSkillId(itemId);
+    setShowSkillModal(true);
+    setSkillModalMode("edit");
+  }
+
+  function handleAddSkillModalMode() {
+    setShowSkillModal(true);
+    setSkillModalMode("add");
+    setSelectedSkillId(null);
+  }
+
+  async function handleEditUser(id) {
+    setSelectedUserId(id);
+    setShowUserModal(true);
+    setUserModalMode("edit");
+  }
+
+  async function handleRemoveUser(id) {
+    setSelectedUserToDelete(id);
+    setItemToDelete(id);
+  }
+
+  async function handleRemoveUserModal() {}
+
+  useEffect(() => {
+    if (!showUserModal) {
+      setSelectedUserId(null);
+      setUserModalMode(null);
+      setSelectedUserToDelete(null);
+    }
+  }, [showUserModal]);
+
   return (
     <>
       <Navbar />
@@ -382,6 +123,13 @@ export default function Admin() {
               admin
               setShowModal={setShowUserModal}
               delete={setItemToDelete}
+              selectedUserId={selectedUserId}
+              skills={skills}
+              userModalMode={userModalMode}
+              setSelectedUserId={setSelectedUserId}
+              setUserModalMode={setUserModalMode}
+              handleEditUser={handleEditUser}
+              handleRemoveUser={handleRemoveUser}
             />
           </div>
           <div className="h-0.5 rounded-full bg-gray-200 my-8" />
@@ -391,24 +139,41 @@ export default function Admin() {
               skills={skills}
               setShowSkillModal={setShowSkillModal}
               delete={setItemToDelete}
+              setSelectedSkillId={setSelectedSkillId}
+              handleEditClick={handleEditClick}
+              handleAddSkillModalMode={handleAddSkillModalMode}
             />
           </div>
         </div>
       </div>
       <UserModal
+        users={users}
+        skills={skills}
         show={showUserModal}
         setShow={setShowUserModal}
         delete={setItemToDelete}
+        handleEditUser={handleEditUser}
+        handleRemoveUser={handleRemoveUser}
+        handleRemoveUserModal={handleRemoveUserModal}
+        selectedUserId={selectedUserId}
+        userModalMode={userModalMode}
+        setUserModalMode={setUserModalMode}
+        userId={selectedUserId}
       />
       <SkillModal
+        skills={skills}
         show={showSkillModal}
         setShow={setShowSkillModal}
         delete={setItemToDelete}
+        id={selectedSkillId}
+        skillModalMode={skillModalMode}
       />
       <DeleteModal
         show={itemToDelete}
         setShow={setItemToDelete}
         delete={deleteItem}
+        userId={selectedUserToDelete}
+        users={users}
       />
     </>
   );

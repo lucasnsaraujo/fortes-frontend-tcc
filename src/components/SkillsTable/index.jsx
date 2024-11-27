@@ -1,9 +1,6 @@
 import { FaPlusCircle } from "react-icons/fa";
 
 function SkillsTable(props) {
-  function contact(id) {
-    console.log(id);
-  }
   return (
     <div className="flex flex-col">
       <div className="-m-1.5 overflow-x-auto">
@@ -13,6 +10,7 @@ function SkillsTable(props) {
               <div className="relative max-w-xs ">
                 <label className="sr-only">Buscar colaborador</label>
                 <input
+                  defaultValue={props?.skill?.nome ?? ""}
                   type="text"
                   name="hs-table-with-pagination-search"
                   id="hs-table-with-pagination-search"
@@ -40,7 +38,7 @@ function SkillsTable(props) {
               <button
                 type="button"
                 className="px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-100 text-blue-800 hover:bg-blue-200 disabled:opacity-50 disabled:pointer-events-none dark:hover:bg-blue-900 dark:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                onClick={() => props?.setShowSkillModal(true)}
+                onClick={props.handleAddSkillModalMode}
               >
                 <FaPlusCircle className="text-blue-800" /> Adicionar habilidade
               </button>
@@ -73,14 +71,16 @@ function SkillsTable(props) {
                         <button
                           type="button"
                           className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                          onClick={() => {}}
+                          onClick={() => props.handleEditClick(skill.id)}
                         >
                           Editar
                         </button>
                         <button
                           type="button"
                           className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-red-600 hover:text-red-800 disabled:opacity-50 disabled:pointer-events-none dark:text-red-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                          onClick={() => props.delete(skill.id)}
+                          onClick={() =>
+                            props.delete({ type: "skill", id: skill.id })
+                          }
                         >
                           Remover
                         </button>

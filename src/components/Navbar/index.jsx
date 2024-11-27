@@ -4,8 +4,11 @@ import { cn } from "../../utils/tailwind";
 export default function Navbar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("@user"));
   const handleLogout = () => {
+    localStorage.removeItem("@user");
     navigate("/");
+    window.location.reload();
   };
   return (
     <>
@@ -83,15 +86,17 @@ export default function Navbar() {
                 Busca
               </Link>
 
-              <Link
-                className={cn(
-                  "font-medium text-gray-600 hover:text-gray-400",
-                  pathname === "/admin" && "text-blue-500"
-                )}
-                to="/admin"
-              >
-                Administrador
-              </Link>
+              {user?.isAdmin && (
+                <Link
+                  className={cn(
+                    "font-medium text-gray-600 hover:text-gray-400",
+                    pathname === "/admin" && "text-blue-500"
+                  )}
+                  to="/admin"
+                >
+                  Administrador
+                </Link>
+              )}
               <Link
                 className={cn(
                   "font-medium text-gray-600 hover:text-gray-400",

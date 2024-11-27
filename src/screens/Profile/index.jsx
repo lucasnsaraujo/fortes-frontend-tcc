@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Modal } from "../../components/Modal";
 import Navbar from "../../components/Navbar";
 
-import { FaPlusCircle, FaMinusCircle } from "react-icons/fa";
-import { cn } from "../../utils/tailwind";
+import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import { StarRating } from "../../components/StarRating";
+import { cn } from "../../utils/tailwind";
 
 export default function Search() {
   const [showingModal, setShowingModal] = useState(false);
@@ -45,8 +45,6 @@ export default function Search() {
     allSelectedSkills[selectedIndex].experience = value;
     setSelectedSkills(allSelectedSkills);
   }
-
-  console.log(selectedSkills);
 
   const skills = [
     { id: 1, nome: "Programação em Python" },

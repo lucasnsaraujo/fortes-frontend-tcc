@@ -1,10 +1,24 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { pb } from "../../services/pocketbase";
 
 export default function Login() {
   const navigate = useNavigate();
   async function handleLogin() {
-    navigate("/search");
+    try {
+      const user = await pb
+        .collection("usuarios")
+        .getFirstListItem(`codigoFuncionario="${numeroCadastro}"`);
+
+      localStorage.setItem("@user", JSON.stringify(user));
+      navigate("/search");
+      window.location.reload();
+    } catch (error) {
+      alert("Usuário não encontrado");
+    }
   }
+
+  const [numeroCadastro, setNumeroCadastro] = useState("");
   return (
     <div className="bg-zinc-50">
       <div className="max-w-3xl flex justify-between items-center my-0 mx-auto w-full h-screen">
@@ -23,6 +37,8 @@ export default function Login() {
               className="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
               placeholder="0000000000"
               maxLength={9}
+              value={numeroCadastro}
+              onChange={(e) => setNumeroCadastro(e.target.value)}
             />
           </div>
 
