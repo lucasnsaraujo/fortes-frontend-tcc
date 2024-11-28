@@ -1,7 +1,21 @@
+import { useMemo, useState } from "react";
 import { AiOutlineMail } from "react-icons/ai";
-import { FaPlusCircle } from "react-icons/fa";
+import { FaPlusCircle, FaSpinner } from "react-icons/fa";
 
 function Table(props) {
+  const [search, setSearch] = useState();
+  const usersShown = useMemo(() => {
+    if (!search) return props?.users;
+    return props?.users?.filter((user) => {
+      const hasUserWithString = user?.name
+        ?.toLowerCase()
+        ?.includes(search?.toLowerCase());
+      const hasSkillWithString = user?.skills?.some((skill) =>
+        skill?.name?.toLowerCase()?.includes(search?.toLowerCase())
+      );
+      return hasUserWithString || hasSkillWithString;
+    });
+  }, [search, props.users]);
   return (
     <div className="flex flex-col">
       <div className="-m-1.5 overflow-x-auto">
@@ -16,6 +30,8 @@ function Table(props) {
                   id="hs-table-with-pagination-search"
                   className="py-2 w-96 px-3 ps-9 block border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
                   placeholder="Pesquise por nome"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
                 <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-3">
                   <svg
@@ -73,7 +89,7 @@ function Table(props) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {props?.users?.map((user, index) => (
+                  {usersShown?.map((user, index) => (
                     <tr key={index}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
                         {user.name}
@@ -115,7 +131,6 @@ function Table(props) {
                               type="button"
                               className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                               onClick={() => {
-                                console.log(user);
                                 props.handleEditUser(user.id);
                               }}
                             >
@@ -125,7 +140,6 @@ function Table(props) {
                               type="button"
                               className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-red-600 hover:text-red-800 disabled:opacity-50 disabled:pointer-events-none dark:text-red-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                               onClick={() => {
-                                console.log(user);
                                 props.handleRemoveUser(user.id);
                               }}
                             >
@@ -138,6 +152,14 @@ function Table(props) {
                   ))}
                 </tbody>
               </table>
+              {usersShown?.length < 1 && (
+                <div className="w-full flex items-center justify-center p-8">
+                  <FaSpinner
+                    color="black"
+                    className="animate-spin transform rotate-180"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

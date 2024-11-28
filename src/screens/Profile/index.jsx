@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Modal } from "../../components/Modal";
 import Navbar from "../../components/Navbar";
 
-import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
+import { FaMinusCircle, FaPlusCircle, FaSpinner } from "react-icons/fa";
 import { StarRating } from "../../components/StarRating";
 import { pb } from "../../services/pocketbase";
 import { cn } from "../../utils/tailwind";
@@ -81,8 +81,11 @@ export default function Search() {
     window.location.reload();
   }
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const currentUser = JSON.parse(localStorage.getItem("@user"));
       const userData = await pb.collection("usuarios").getOne(currentUser?.id);
 
@@ -102,7 +105,6 @@ export default function Search() {
       const userSkills = usersSkills.filter(
         (skill) => skill.usuarioId === userData.id
       );
-      console.log(userSkills);
       const parsed = userSkills.map((skill) => ({
         id: skill.expand.habilidadeId.id,
         nome: skill.expand.habilidadeId.nome,
@@ -115,6 +117,8 @@ export default function Search() {
       setSkills(
         skillsData.map((skill) => ({ id: skill.id, nome: skill.nome }))
       );
+
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -127,24 +131,42 @@ export default function Search() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
           <div>
             <h1 className="text-md mb-2">Nome completo</h1>
-            <input
-              type="text"
-              className="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-              placeholder="Insira seu nome completo"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+            {loading ? (
+              <div className="w-full flex p-4">
+                <FaSpinner
+                  color="black"
+                  className="animate-spin transform rotate-180"
+                />
+              </div>
+            ) : (
+              <input
+                type="text"
+                className="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                placeholder="Insira seu nome completo"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            )}
           </div>
           <div>
             <h1 className="text-md mb-2">Número de cadastro</h1>
-            <input
-              type="text"
-              className="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-              placeholder="Insira seu número de cadastro no banco da Fortes"
-              maxLength={9}
-              value={registerNumber}
-              onChange={(e) => setRegisterNumber(e.target.value)}
-            />
+            {loading ? (
+              <div className="w-full flex p-4">
+                <FaSpinner
+                  color="black"
+                  className="animate-spin transform rotate-180"
+                />
+              </div>
+            ) : (
+              <input
+                type="text"
+                className="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                placeholder="Insira seu número de cadastro no banco da Fortes"
+                maxLength={9}
+                value={registerNumber}
+                onChange={(e) => setRegisterNumber(e.target.value)}
+              />
+            )}
           </div>
           <div className="lg:col-span-2">
             <h1 className="text-md mb-2">Habilidades</h1>
@@ -244,6 +266,14 @@ export default function Search() {
             {/* End table */}
           </div>
         </div>
+        {loading && (
+          <div className="w-full flex flex-1 justify-center items-center p-4">
+            <FaSpinner
+              color="black"
+              className="animate-spin transform rotate-180"
+            />
+          </div>
+        )}
         <button
           type="button"
           onClick={handleSave}

@@ -102,12 +102,9 @@ export function UserModal(props) {
     window.location.reload();
   }
 
-  console.log(selectedSkills);
-
   useEffect(() => {
     if (props?.userModalMode === "edit") {
       const user = props.users.find((user) => user.id === props.userId);
-      console.log(user.skills);
       setName(user?.name);
       setRegisterNumber(user?.codigoFuncionario);
       setSelectedSkills(

@@ -1,6 +1,19 @@
-import { FaPlusCircle } from "react-icons/fa";
+import { useMemo, useState } from "react";
+import { FaPlusCircle, FaSpinner } from "react-icons/fa";
 
 function SkillsTable(props) {
+  const [search, setSearch] = useState();
+
+  const skillsShown = useMemo(() => {
+    if (!search) return props?.skills;
+
+    console.log({ search });
+    return props?.skills?.filter((skill) =>
+      skill?.nome?.toLowerCase()?.includes(search?.toLowerCase())
+    );
+  }, [search, props.skills]);
+
+  console.log(skillsShown);
   return (
     <div className="flex flex-col">
       <div className="-m-1.5 overflow-x-auto">
@@ -16,6 +29,8 @@ function SkillsTable(props) {
                   id="hs-table-with-pagination-search"
                   className="py-2 px-3 ps-9 flex flex-1 w-96 border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
                   placeholder="Pesquise por habilidade"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
                 <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-3">
                   <svg
@@ -62,7 +77,7 @@ function SkillsTable(props) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {props?.skills?.map((skill, index) => (
+                  {skillsShown?.map((skill, index) => (
                     <tr key={index}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
                         {skill.nome}
@@ -89,6 +104,14 @@ function SkillsTable(props) {
                   ))}
                 </tbody>
               </table>
+              {skillsShown?.length < 1 && (
+                <div className="w-full flex items-center justify-center p-8">
+                  <FaSpinner
+                    color="black"
+                    className="animate-spin transform rotate-180"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

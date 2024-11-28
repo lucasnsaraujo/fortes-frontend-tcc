@@ -27,7 +27,6 @@ export default function Admin() {
   const [userModalMode, setUserModalMode] = useState("");
 
   async function deleteItem() {
-    console.log({ selectedUserToDelete });
     if (!itemToDelete) return;
 
     if (itemToDelete?.type === "skill") {
